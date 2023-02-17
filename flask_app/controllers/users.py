@@ -1,5 +1,5 @@
 from flask_app import app
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, session
 from flask_app.models.user import User
 
 @app.route('/')
@@ -9,6 +9,8 @@ def index():
 
 @app.route('/create_user', methods=['POST'])
 def create_user():
+    if not User.validate_user(request.form):
+        return redirect('/')
     data = {
         "fname": request.form['fname'],
         "lname": request.form['lname'],
@@ -41,6 +43,8 @@ def edit_user(id):
 
 @app.route('/updated', methods=['POST'])
 def updated():
+    if not User.validate_user(request.form):
+        return redirect('/display_user')
     User.updated(request.form)
     return redirect('/display_user')
 

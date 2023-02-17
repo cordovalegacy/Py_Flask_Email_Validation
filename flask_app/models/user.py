@@ -1,5 +1,7 @@
 from flask_app.config.mysqlconnection import connectToMySQL
-
+from flask import flash
+import re
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 
 class User:
 
@@ -40,3 +42,17 @@ class User:
         query = "SELECT * FROM users WHERE id=%(id)s"
         result = connectToMySQL('users_schema').query_db(query, data)
         return cls(result[0])
+
+    @staticmethod
+    def validate_user(data):
+        is_valid = True
+        if len(data['fname']) < 2:
+            flash("First Name must be at least 2 characters")
+            is_valid = False
+        if len(data['lname']) < 2:
+            flash("Last Name must be at least 2 characters")
+            is_valid = False
+        if len(data['eml']) < 12:
+            flash("Email Address must be at least 12 characters")
+            is_valid = False
+        return is_valid

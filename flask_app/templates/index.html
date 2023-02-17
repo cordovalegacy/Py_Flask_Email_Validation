@@ -15,6 +15,13 @@
         class="bg-dark m-auto p-3 w-50 h-100 text-center text-light form-control border border-light">
         <h2>Add a user to the system</h2>
         <hr />
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <div class="form-group">
             <label for="fname">First Name:</label>
             <input type="text" name="fname" />
